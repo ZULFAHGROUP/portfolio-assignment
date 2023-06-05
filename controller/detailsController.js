@@ -52,7 +52,7 @@ const createDetails = async (req, res) => {
 const updateDetails = (req, res) => {
   try {
     details
-      .findOneAndUpdate({ _id: req.params.id })
+      .updateOne({ _id: req.body_id }, { $set: req.params.id })
       .then((result) => {
         console.log(result);
 
