@@ -1,6 +1,6 @@
 /** @format */
 
-const collections = require("../config/db");
+const { details } = require("../config/db");
 const validateDetails = require("../validation/detailsValidation");
 
 const createDetails = async (req, res) => {
@@ -13,8 +13,8 @@ const createDetails = async (req, res) => {
       });
       return;
     }
-    const alreadyExist = await collections.details.findOne({
-      email: email,
+    const alreadyExist = await details.findOne({
+      email: req.body.email,
     });
     if (alreadyExist) {
       return res.status(404).json({
@@ -22,7 +22,7 @@ const createDetails = async (req, res) => {
         msg: "Details already exist",
       });
     }
-    collections.details
+    details
       .insertOne(req.body)
       .then((result) => {
         console.log(result);
@@ -49,10 +49,10 @@ const createDetails = async (req, res) => {
   }
 };
 
-const updateDetails = () => {
+const updateDetails = (req, res) => {
   try {
-    collections.details
-      .findOneAndUpdate(req.body)
+    details
+      .findOneAndUpdate({ _id: req.params.id })
       .then((result) => {
         console.log(result);
 
@@ -66,7 +66,7 @@ const updateDetails = () => {
 
         res.status(400).json({
           ok: false,
-          msg: "User user failed",
+          msg: "User update failed",
           error: err.message,
         });
       });
@@ -78,4 +78,19 @@ const updateDetails = () => {
   }
 };
 
-module.exports = { createDetails, updateDetails };
+const getAllDetails = async (req, res) => {
+  try {
+    const info = await details.find();
+    res.status(200).json({
+      status: "OK",
+      data: info,
+    });
+  } catch (error) {
+    res.status(201).json({
+      ok: true,
+      msg: error.message,
+    });
+  }
+};
+
+module.exports = { createDetails, updateDetails, getAllDetails };

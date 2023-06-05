@@ -9,19 +9,14 @@ const connectDB = async () => {
     await client.connect();
 
     console.log("Mongodb connection established");
-
-    const something = client.db("portfolio");
-    const details = something.collection("details");
-    const skills = something.collection("skills");
-
-    return {
-      details,
-      skills,
-    };
   } catch (error) {
     console.log("Mongodb connection failed: " + error);
     client.close();
   }
 };
 
-module.exports = connectDB;
+const something = client.db("portfolio");
+const details = something.collection("details");
+const skills = something.collection("skills");
+
+module.exports = { connectDB, details, skills };

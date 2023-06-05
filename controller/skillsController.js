@@ -1,6 +1,6 @@
 /** @format */
 
-const collections = require("../config/db");
+const { skills } = require("../config/db");
 const validateSkills = require("../validation/skilsValidation");
 
 const creatSkills = (req, res) => {
@@ -9,11 +9,11 @@ const creatSkills = (req, res) => {
     if (error !== undefined) {
       res.status(400).json({
         ok: false,
-        msg: error.skills[0].message,
+        msg: error.details[0].message,
       });
       return;
     }
-    collections.skills
+    skills
       .insertOne(req.body)
       .then((result) => {
         console.log(result);
@@ -42,7 +42,7 @@ const creatSkills = (req, res) => {
 
 const updateSkills = () => {
   try {
-    collections.skills
+    skills
       .findOneAndUpdate(req.body)
       .then((result) => {
         console.log(result);
